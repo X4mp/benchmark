@@ -64,7 +64,7 @@ func spawn() *cliapp.Command {
 			defer term.Close()
 
 			// blockchain started, loop until we stop:
-			str := fmt.Sprintf("XMN cloud blockchain spawned, IP: %s\nPress Esc to stop...", client.IP())
+			str := fmt.Sprintf("XMN benchmark blockchain spawned, IP: %s\nPress Esc to stop...", client.IP())
 			helpers.Print(str)
 
 		keyPressListenerLoop:

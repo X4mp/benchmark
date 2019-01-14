@@ -1,0 +1,11 @@
+[[override]]
+  name = "github.com/xmnservices/xmnsuite"
+  branch = "master"
+
+[[override]]
+  name = "github.com/oelmekki/matrix"
+  branch = "master"
+
+[prune]
+  go-tests = true
+  unused-packages = true

@@ -1,0 +1,7 @@
+vendor
+test_files*/
+TODO.md
+db
+build*
+.DS_Store
+credentials.xmn

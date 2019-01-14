@@ -1,6 +1,15 @@
 # Benchmark
 This is a benchmark blockchain, where server providers and benchmark requesters create benchmark reports and sells them to customers that needs benchmark data.
 
+## Install dependencies
+We use the [dep dependency manager](https://github.com/golang/dep) in order to manage dependencies.  Make sure you have it installed on your computer, if you don't visit the link above and follow instructions to install it.  
+
+Then, install the dependencies using this command:
+
+~~~~
+dep ensure
+~~~~
+
 ## Command line application
 To run the command line tool, simply execute this command:
 

@@ -18,6 +18,10 @@ By using the benchmark blockchain reports, CDN's could detect the speed at which
 We will create a smart CDN network where file hosts (servers) can be provided by anyone, anywhere.  The speed between decentralized servers and the downloaders will be provided by the benchmark blockchain reports, automatically.  That way, downloaders will always receive their files from the quickest servers possible.
 
 ### Partners
+We don't want to create our own client applications.  There is already enough benchmark client applications available.  Instead of competing with them, we want to partner with them, so they each use our blockchain.  Each partner will have tokens in the benchmark blockchain, making them part owners of the global benchmark blockchain.
+
+Here's a list of the partners we want to target:
+
 
 ## Token
 ### Economic

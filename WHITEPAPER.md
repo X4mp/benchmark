@@ -24,8 +24,13 @@ Here's a list of the partners we want to target:
 
 
 ## Token
+The benchmark blockchain is a proof-of-stake (PoS) blockchain application, where each node have an equal voting power on the blockchain as the amount of token they pledge.
+
+The tokens are all generated at first, then distributed among the original developers of the project and people that add value to its ecosystem.
+
 ### Economic
 ### Decentralization
+### Pledges
 
 ## Features
 

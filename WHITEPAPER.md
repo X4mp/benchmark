@@ -59,9 +59,16 @@ Each project can have milestones with a specific mission.  A milestone must be f
 
 Every time someone executes a task and submit it as done, the project manager of that specific project must review it.  When a milestone is finished, the token holders verifies that the milestone is completed.  If the token holders approves the milestone, everyone that executed tasks get paid automatically.
 
-The project manager receives a percentage of all the earnings made by the people that executed tasks on his project.  The percentage is voted by the token holders.
+The project manager receives a percentage of all the earnings made by the people that executed tasks on his project.  The percentage is voted by the token holders.A
 
 ### Guarantee
+Each person that wants to provide a service to the benchmark blockchain needs to be trusted by the token holders.  In order to be trusted, each person must make a pledge to the blockchain wallet.  The pledge amount varies depending of the service provided.  If a person act against the interest of the benchmark blockchain, the pledge is seized and deposited in the blockchain wallet.
+
+#### Node
+The benchmark blockchain is a proof-of-stake blockchain. The stake is a pledge that the node makes to the network's wallet.  If a node propagate false information regarding blocks and the network discovers the rogue activity, the pledge will be seized and given to the network's wallet.
+
+#### Servers
+
 
 ## Features
 

@@ -36,3 +36,61 @@ go run main.go spawn --dir ./db --pass MYPASS --file ./credentials.xmn
 ~~~~
 
 The --dir parameter represents the folder where the blockchain will save its data.  The --pass represents the password to decrypt the config file and the --file parameter is the path to your encrypted file.
+
+## Golang SDK
+There is a built-in SDK in the xmnsuite package that makes it very easy to communicate with a running blockchain.
+
+### Retrieve an object
+To retrieve an instance from the blockchain, you need to sign your query using your private key.  Therefore, you need to load your config instance from your encrypted config file, then execute your query.
+
+Here's an example that retrieve the Information instance.  Please note that I ignore all errors to simplify the example.  Make sure to manage errors in your application.
+
+~~~~
+package main
+
+import (
+	"fmt"
+
+	"github.com/xmnnetwork/benchmark/objects/information"
+	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
+	"github.com/xmnservices/xmnsuite/blockchains/tendermint"
+	"github.com/xmnservices/xmnsuite/configs"
+)
+
+func main() {
+
+	// variables:
+	filePath := "./credentials.xmn"
+	pass := "MYPASS"
+	blockchainHost := "127.0.0.1:26657"
+
+	// create the config repository:
+	confRepository := configs.SDKFunc.CreateRepository()
+
+	// retrieve the config:
+	conf, _ := confRepository.Retrieve(filePath, pass)
+
+	// create the client:
+	client := tendermint.SDKFunc.CreateClient(tendermint.CreateClientParams{
+		IPAsString: blockchainHost,
+	})
+
+	// create the entity repository:
+	entityRepository := entity.SDKFunc.CreateSDKRepository(entity.CreateSDKRepositoryParams{
+		PK:     conf.WalletPK(),
+		Client: client,
+	})
+
+	// create the specific repository of the object you want to retrieve:
+	informationRepository := information.SDKFunc.CreateRepository(information.CreateRepositoryParams{
+		EntityRepository: entityRepository,
+	})
+
+	// then retrieve the instance:
+	inf, _ := informationRepository.Retrieve()
+
+	// print:
+	fmt.Sprintf("Instance: %v", inf)
+}
+
+~~~~

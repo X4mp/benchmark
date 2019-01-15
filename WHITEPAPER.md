@@ -1,7 +1,7 @@
 # Benchmark
 Benchmark is a blockchain application that enables servers and mobile users to test their connectivity with peers.  The reports are encrypted and stored on the blockchain database and customers can download the report listing they need and pay to decrypt them.
 
-To make the wallpaper easier to read, we will call the entity that request reports "clients", the entity that verify the bandwith of clients "servers" and the entity that buys reports "customers".
+To make the wallpaper easier to read, we will call the entity that request reports "clients", the entity that verify the bandwidth of clients "servers" and the entity that buys reports "customers".
 
 ## Business
 The business of the benchmark application is to sell benchmark reports based on the customer's specifications.  The target customers are companies and/or organizations that are affected by mobile activity and network usage.
@@ -44,7 +44,17 @@ Clients are paid every time a report is generated with them.  The amount they ar
 If the community wallet contains too much tokens, the token holders can vote to withdraw some tokens it holds to all token holders.  On the other hand, if it lack funds to pay clients, the token holders can vote to take tokens from everyone in the blockchain, pro-rata of the token each wallet owns.
 
 ### Decentralization
-### Pledges
+The benchmark blockchain tokens is a project created by the Artiqox team.  Therefore, the Artiqox coin (AIQ) holders will receive a good portion of the original benchmark tokens.
+
+Partners that currently run benchmark websites and want to convert their application to use this blockchain will receive the remaining tokens.
+
+The AIQ holders will be able to download the benchmark application, import their AIQ private keys and tell the benchmark blockchain which wallet they own, to create a match between the wallets of the benchmark wallet with their AIQ wallets.  By doing so, the blockchain will know the amount of benchmark tokens to send to which wallet, based on AIQ ownership, at the airdrop date.
+
+There will be no ICO for this project.
+
+### Future development
+
+### Guarantee
 
 ## Features
 

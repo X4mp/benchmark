@@ -53,6 +53,13 @@ The AIQ holders will be able to download the benchmark application, import their
 There will be no ICO for this project.
 
 ### Future development
+In the benchmark client application (GUI), there is a built-in project management system.  Every token holder will be able to create new projects, then the token holders will vote in order to accept/refuse the new project.
+
+Each project can have milestones with a specific mission.  A milestone must be funded in benchmark token in order to be executed.  A milestone can be project development, sales tasks, emails to sends, interviews with journalists and/or articles to write to communicate with the community.
+
+Every time someone executes a task and submit it as done, the project manager of that specific project must review it.  When a milestone is finished, the token holders verifies that the milestone is completed.  If the token holders approves the milestone, everyone that executed tasks get paid automatically.
+
+The project manager receives a percentage of all the earnings made by the people that executed tasks on his project.  The percentage is voted by the token holders.
 
 ### Guarantee
 

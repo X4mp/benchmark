@@ -41,9 +41,7 @@ Every time a customer orders a report, a percentage of the transaction goes to a
 
 Clients are paid every time a report is generated with them.  The amount they are paid per report and the frequency at which they can request reports are voted by all token holders.
 
-If the community wallet contains too much tokens, the token holders can vote to withdraw some tokens it holds to all token holders.
-
-If the community wallet lack funds to pay clients, the token holders can vote to take tokens from everyone in the blockchain, pro-rata of the token each wallet owns.
+If the community wallet contains too much tokens, the token holders can vote to withdraw some tokens it holds to all token holders.  On the other hand, if it lack funds to pay clients, the token holders can vote to take tokens from everyone in the blockchain, pro-rata of the token each wallet owns.
 
 ### Decentralization
 ### Pledges

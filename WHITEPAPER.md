@@ -1,6 +1,8 @@
 # Benchmark
 Benchmark is a blockchain application that enables servers and mobile users to test their connectivity with peers.  The reports are encrypted and stored on the blockchain database and customers can download the report listing they need and pay to decrypt them.
 
+To make the wallpaper easier to read, we will call the entity that request reports "clients", the entity that verify the bandwith of clients "servers" and the entity that buys reports "customers".
+
 ## Business
 The business of the benchmark application is to sell benchmark reports based on the customer's specifications.  The target customers are companies and/or organizations that are affected by mobile activity and network usage.
 
@@ -28,7 +30,21 @@ The benchmark blockchain is a proof-of-stake (PoS) blockchain application, where
 
 The tokens are all generated at first, then distributed among the original developers of the project and people that add value to its ecosystem.
 
+## Voting system
+### Token holder votes
+### Wallet shareholders votes
+
 ### Economic
+In the benchmark blockchain, the clients are paid to request reports on the blockchain.  Servers owns the reports and are paid when customers orders reports from them.
+
+Every time a customer orders a report, a percentage of the transaction goes to a wallet that is held by all token holders.  The remaining goes to the server that owns the report.
+
+Clients are paid every time a report is generated with them.  The amount they are paid per report and the frequency at which they can request reports are voted by all token holders.
+
+If the community wallet contains too much tokens, the token holders can vote to withdraw some tokens it holds to all token holders.
+
+If the community wallet lack funds to pay clients, the token holders can vote to take tokens from everyone in the blockchain, pro-rata of the token each wallet owns.
+
 ### Decentralization
 ### Pledges
 

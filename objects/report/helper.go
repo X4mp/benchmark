@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/xmnnetwork/benchmark/objects/client"
+	"github.com/xmnnetwork/benchmark/objects/request"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 	"github.com/xmnservices/xmnsuite/datastore"
 )
@@ -13,9 +14,9 @@ func retrieveAllReportKeyname() string {
 	return "reports"
 }
 
-func retrieveReportByClientKeyname(clnt client.Client) string {
+func retrieveReportByRequestKeyname(req request.Request) string {
 	base := retrieveAllReportKeyname()
-	return fmt.Sprintf("%s:by_client_id:%s", base, clnt.ID().String())
+	return fmt.Sprintf("%s:by_request_id:%s", base, req.ID().String())
 }
 
 func createMetaData() entity.MetaData {
@@ -81,7 +82,7 @@ func representation() entity.Representation {
 			if rep, ok := ins.(Report); ok {
 				return []string{
 					retrieveAllReportKeyname(),
-					retrieveReportByClientKeyname(rep.Client()),
+					retrieveReportByRequestKeyname(rep.Request()),
 				}, nil
 			}
 
@@ -97,9 +98,9 @@ func representation() entity.Representation {
 				entityRepository := entity.SDKFunc.CreateRepository(ds)
 
 				// make sure the client exists:
-				_, retClientErr := entityRepository.RetrieveByID(clientMetaData, rep.Client().ID())
+				_, retClientErr := entityRepository.RetrieveByID(clientMetaData, rep.Request().ID())
 				if retClientErr != nil {
-					str := fmt.Sprintf("the given Report (ID: %s) contains a Client (ID: %s) that does not exists", rep.ID().String(), rep.Client().ID().String())
+					str := fmt.Sprintf("the given Report (ID: %s) contains a Request (ID: %s) that does not exists", rep.ID().String(), rep.Request().ID().String())
 					return errors.New(str)
 				}
 

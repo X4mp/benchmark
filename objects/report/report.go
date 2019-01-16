@@ -5,19 +5,19 @@ import (
 	"fmt"
 
 	uuid "github.com/satori/go.uuid"
-	"github.com/xmnnetwork/benchmark/objects/client"
+	"github.com/xmnnetwork/benchmark/objects/request"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
 
 type report struct {
-	UUID *uuid.UUID    `json:"id"`
-	Clnt client.Client `json:"client"`
+	UUID *uuid.UUID      `json:"id"`
+	Req  request.Request `json:"request"`
 }
 
-func createReport(id *uuid.UUID, clnt client.Client) (Report, error) {
+func createReport(id *uuid.UUID, req request.Request) (Report, error) {
 	out := report{
 		UUID: id,
-		Clnt: clnt,
+		Req:  req,
 	}
 
 	return &out, nil
@@ -29,16 +29,16 @@ func createReportFromNormalized(normalized *normalizedReport) (Report, error) {
 		return nil, idErr
 	}
 
-	clIns, clInsErr := client.SDKFunc.CreateMetaData().Denormalize()(normalized.Client)
-	if clInsErr != nil {
-		return nil, clInsErr
+	reqIns, reqInsErr := request.SDKFunc.CreateMetaData().Denormalize()(normalized.Request)
+	if reqInsErr != nil {
+		return nil, reqInsErr
 	}
 
-	if cl, ok := clIns.(client.Client); ok {
-		return createReport(&id, cl)
+	if req, ok := reqIns.(request.Request); ok {
+		return createReport(&id, req)
 	}
 
-	str := fmt.Sprintf("the entity (ID: %s) is not a valid Client instance", clIns.ID().String())
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Request instance", reqIns.ID().String())
 	return nil, errors.New(str)
 }
 
@@ -48,21 +48,21 @@ func createReportFromStorable(storable *storableReport, rep entity.Repository) (
 		return nil, idErr
 	}
 
-	clientID, clientIDErr := uuid.FromString(storable.ClientID)
-	if clientIDErr != nil {
-		return nil, clientIDErr
+	reqID, reqIDErr := uuid.FromString(storable.RequestID)
+	if reqIDErr != nil {
+		return nil, reqIDErr
 	}
 
-	clIns, clInsErr := rep.RetrieveByID(client.SDKFunc.CreateMetaData(), &clientID)
-	if clInsErr != nil {
-		return nil, clInsErr
+	reqIns, reqInsErr := rep.RetrieveByID(request.SDKFunc.CreateMetaData(), &reqID)
+	if reqInsErr != nil {
+		return nil, reqInsErr
 	}
 
-	if cl, ok := clIns.(client.Client); ok {
-		return createReport(&id, cl)
+	if req, ok := reqIns.(request.Request); ok {
+		return createReport(&id, req)
 	}
 
-	str := fmt.Sprintf("the entity (ID: %s) is not a valid Client instance", clIns.ID().String())
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Request instance", reqIns.ID().String())
 	return nil, errors.New(str)
 }
 
@@ -71,7 +71,7 @@ func (obj *report) ID() *uuid.UUID {
 	return obj.UUID
 }
 
-// Client returns the client
-func (obj *report) Client() client.Client {
-	return obj.Clnt
+// Request returns the request
+func (obj *report) Request() request.Request {
+	return obj.Req
 }

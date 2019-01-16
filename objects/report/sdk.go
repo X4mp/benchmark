@@ -1,7 +1,6 @@
 package report
 
 import (
-	"github.com/coreos/etcd/client"
 	uuid "github.com/satori/go.uuid"
 	"github.com/xmnnetwork/benchmark/objects/request"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
@@ -20,13 +19,13 @@ type Normalized interface {
 // Repository represents a report instance
 type Repository interface {
 	RetrieveByID(id *uuid.UUID) (Report, error)
-	RetrieveSetByClient(cl client.Client, index int, amount int) (entity.PartialSet, error)
+	RetrieveByRequest(req request.Request) (Report, error)
 }
 
 // CreateParams represents the Create params
 type CreateParams struct {
-	ID     *uuid.UUID
-	Client client.Client
+	ID      *uuid.UUID
+	Request request.Request
 }
 
 // CreateRepositoryParams represents the CreateRepository params
@@ -47,7 +46,7 @@ var SDKFunc = struct {
 			params.ID = &id
 		}
 
-		out, outErr := createReport(params.ID, params.Client)
+		out, outErr := createReport(params.ID, params.Request)
 		if outErr != nil {
 			panic(outErr)
 		}

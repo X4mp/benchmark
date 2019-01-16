@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	uuid "github.com/satori/go.uuid"
-	"github.com/xmnnetwork/benchmark/objects/client"
+	"github.com/xmnnetwork/benchmark/objects/request"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
 
@@ -38,8 +38,22 @@ func (app *repository) RetrieveByID(id *uuid.UUID) (Report, error) {
 	return nil, errors.New(str)
 }
 
-// RetrieveSetByClient retrieves a report set by client
-func (app *repository) RetrieveSetByClient(cl client.Client, index int, amount int) (entity.PartialSet, error) {
-	keynames := []string{}
-	return app.entityRepository.RetrieveSetByIntersectKeynames(app.metaData, keynames, index, amount)
+// RetrieveSetByRequest retrieves a report by request
+func (app *repository) RetrieveByRequest(req request.Request) (Report, error) {
+	keynames := []string{
+		retrieveAllReportKeyname(),
+		retrieveReportByRequestKeyname(req),
+	}
+
+	ins, insErr := app.entityRepository.RetrieveByIntersectKeynames(app.metaData, keynames)
+	if insErr != nil {
+		return nil, insErr
+	}
+
+	if rep, ok := ins.(Report); ok {
+		return rep, nil
+	}
+
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Information instance", ins.ID().String())
+	return nil, errors.New(str)
 }

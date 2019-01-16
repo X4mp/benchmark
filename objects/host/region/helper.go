@@ -26,17 +26,17 @@ func createMetaData() entity.MetaData {
 		Name: "Region",
 		ToEntity: func(rep entity.Repository, data interface{}) (entity.Entity, error) {
 			if storable, ok := data.(*storableRegion); ok {
-				return createRegionFromStorable(storable)
+				return createRegionFromStorable(storable, rep)
 			}
 
 			if dataAsBytes, ok := data.([]byte); ok {
-				ptr := new(storableRegion)
+				ptr := new(normalizedRegion)
 				jsErr := cdc.UnmarshalJSON(dataAsBytes, ptr)
 				if jsErr != nil {
 					return nil, jsErr
 				}
 
-				return createRegionFromStorable(ptr)
+				return createRegionFromNormalized(ptr)
 			}
 
 			str := fmt.Sprintf("the given data does not represent a Region instance: %s", data)
@@ -53,13 +53,13 @@ func createMetaData() entity.MetaData {
 			return nil, errors.New(str)
 		},
 		Denormalize: func(ins interface{}) (entity.Entity, error) {
-			if storable, ok := ins.(*storableRegion); ok {
-				return createRegionFromStorable(storable)
+			if normalized, ok := ins.(*normalizedRegion); ok {
+				return createRegionFromNormalized(normalized)
 			}
 
 			return nil, errors.New("the given storable instance cannot be converted to a Region instance")
 		},
-		EmptyNormalized: new(storableRegion),
+		EmptyNormalized: new(normalizedRegion),
 		EmptyStorable:   new(storableRegion),
 	})
 }

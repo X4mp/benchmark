@@ -2,6 +2,7 @@ package region
 
 import (
 	uuid "github.com/satori/go.uuid"
+	"github.com/xmnnetwork/benchmark/objects/host/country"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
 
@@ -9,6 +10,7 @@ import (
 type Region interface {
 	ID() *uuid.UUID
 	Name() string
+	Country() country.Country
 }
 
 // Normalized represents a normalized region
@@ -24,8 +26,9 @@ type Repository interface {
 
 // CreateParams represents the Create params
 type CreateParams struct {
-	ID   *uuid.UUID
-	Name string
+	ID      *uuid.UUID
+	Name    string
+	Country country.Country
 }
 
 // CreateRepositoryParams represents the CreateRepository params
@@ -46,7 +49,7 @@ var SDKFunc = struct {
 			params.ID = &id
 		}
 
-		out, outErr := createRegion(params.ID, params.Name)
+		out, outErr := createRegion(params.ID, params.Name, params.Country)
 		if outErr != nil {
 			panic(outErr)
 		}

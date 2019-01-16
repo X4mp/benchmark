@@ -1,19 +1,28 @@
 package information
 
-import uuid "github.com/satori/go.uuid"
+import (
+	"errors"
+	"fmt"
+
+	uuid "github.com/satori/go.uuid"
+	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
+	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity/entities/wallet"
+)
 
 type information struct {
-	UUID                 *uuid.UUID `json:"id"`
-	Price                int        `json:"price_per_report_purchase"`
-	Reward               int        `json:"reward_per_report"`
-	MaxSpeedDiff         int        `json:"max_speed_difference_for_noise"`
-	DiffPercentForStrike int        `json:"difference_for_strike"`
-	MxStrikes            int        `json:"max_strikes"`
+	UUID                 *uuid.UUID    `json:"id"`
+	NetWallet            wallet.Wallet `json:"network_wallet"`
+	Price                int           `json:"price_per_report_purchase"`
+	Reward               int           `json:"reward_per_report"`
+	MaxSpeedDiff         int           `json:"max_speed_difference_for_noise"`
+	DiffPercentForStrike int           `json:"difference_for_strike"`
+	MxStrikes            int           `json:"max_strikes"`
 }
 
-func createInformation(id *uuid.UUID, price int, reward int, maxSpeedDiff int, diffPercentForStrike int, maxStrikes int) (Information, error) {
+func createInformation(id *uuid.UUID, netWallet wallet.Wallet, price int, reward int, maxSpeedDiff int, diffPercentForStrike int, maxStrikes int) (Information, error) {
 	out := information{
 		UUID:                 id,
+		NetWallet:            netWallet,
 		Price:                price,
 		Reward:               reward,
 		MaxSpeedDiff:         maxSpeedDiff,
@@ -24,25 +33,74 @@ func createInformation(id *uuid.UUID, price int, reward int, maxSpeedDiff int, d
 	return &out, nil
 }
 
-func createInformationFromStorable(storable *storableInformation) (Information, error) {
+func createInformationFromNormalized(normalized *normalizedInformation) (Information, error) {
+	id, idErr := uuid.FromString(normalized.ID)
+	if idErr != nil {
+		return nil, idErr
+	}
+
+	walIns, walInsErr := wallet.SDKFunc.CreateMetaData().Denormalize()(normalized.NetworkWallet)
+	if walInsErr != nil {
+		return nil, walInsErr
+	}
+
+	if wal, ok := walIns.(wallet.Wallet); ok {
+		return createInformation(
+			&id,
+			wal,
+			normalized.PricePerReportPurchase,
+			normalized.RewardPerReport,
+			normalized.MaxSpeedDifferentForNoise,
+			normalized.DifferencePercentForStrike,
+			normalized.MaxStrikes,
+		)
+	}
+
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Wallet instance", walIns.ID().String())
+	return nil, errors.New(str)
+
+}
+
+func createInformationFromStorable(storable *storableInformation, rep entity.Repository) (Information, error) {
 	id, idErr := uuid.FromString(storable.ID)
 	if idErr != nil {
 		return nil, idErr
 	}
 
-	return createInformation(
-		&id,
-		storable.PricePerReportPurchase,
-		storable.RewardPerReport,
-		storable.MaxSpeedDifferentForNoise,
-		storable.DifferencePercentForStrike,
-		storable.MaxStrikes,
-	)
+	walID, walIDErr := uuid.FromString(storable.NetworkWalletID)
+	if walIDErr != nil {
+		return nil, walIDErr
+	}
+
+	walIns, walInsErr := rep.RetrieveByID(wallet.SDKFunc.CreateMetaData(), &walID)
+	if walInsErr != nil {
+		return nil, walInsErr
+	}
+
+	if wal, ok := walIns.(wallet.Wallet); ok {
+		return createInformation(
+			&id,
+			wal,
+			storable.PricePerReportPurchase,
+			storable.RewardPerReport,
+			storable.MaxSpeedDifferentForNoise,
+			storable.DifferencePercentForStrike,
+			storable.MaxStrikes,
+		)
+	}
+
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Wallet instance", walIns.ID().String())
+	return nil, errors.New(str)
 }
 
 // ID returns the ID
 func (obj *information) ID() *uuid.UUID {
 	return obj.UUID
+}
+
+// NetworkWallet returns the network wallet
+func (obj *information) NetworkWallet() wallet.Wallet {
+	return obj.NetWallet
 }
 
 // PricePerReportPurchase returns the price per report purchase

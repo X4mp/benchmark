@@ -1,9 +1,9 @@
 package information
 
 import (
-	"github.com/NebulousLabs/Sia/modules/wallet"
 	uuid "github.com/satori/go.uuid"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
+	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity/entities/wallet"
 )
 
 // Information represents the blockchain information
@@ -29,6 +29,7 @@ type Repository interface {
 // CreateParams represents the Create params
 type CreateParams struct {
 	ID                         *uuid.UUID
+	NetworkWallet              wallet.Wallet
 	PricePerReportPurchase     int
 	RewardPerReport            int
 	MaxSpeedDifferentForNoise  int
@@ -56,6 +57,7 @@ var SDKFunc = struct {
 
 		out, outErr := createInformation(
 			params.ID,
+			params.NetworkWallet,
 			params.PricePerReportPurchase,
 			params.RewardPerReport,
 			params.MaxSpeedDifferentForNoise,

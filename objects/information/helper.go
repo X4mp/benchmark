@@ -18,17 +18,17 @@ func createMetaData() entity.MetaData {
 		Name: "BenchmarkInformation",
 		ToEntity: func(rep entity.Repository, data interface{}) (entity.Entity, error) {
 			if storable, ok := data.(*storableInformation); ok {
-				return createInformationFromStorable(storable)
+				return createInformationFromStorable(storable, rep)
 			}
 
 			if dataAsBytes, ok := data.([]byte); ok {
-				ptr := new(storableInformation)
+				ptr := new(normalizedInformation)
 				jsErr := cdc.UnmarshalJSON(dataAsBytes, ptr)
 				if jsErr != nil {
 					return nil, jsErr
 				}
 
-				return createInformationFromStorable(ptr)
+				return createInformationFromNormalized(ptr)
 			}
 
 			str := fmt.Sprintf("the given data does not represent a Information instance: %s", data)
@@ -37,21 +37,20 @@ func createMetaData() entity.MetaData {
 		},
 		Normalize: func(ins entity.Entity) (interface{}, error) {
 			if inf, ok := ins.(Information); ok {
-				out := createStorableInformation(inf)
-				return out, nil
+				return createNormalizedInformation(inf)
 			}
 
 			str := fmt.Sprintf("the given entity (ID: %s) is not a valid Information instance", ins.ID().String())
 			return nil, errors.New(str)
 		},
 		Denormalize: func(ins interface{}) (entity.Entity, error) {
-			if storable, ok := ins.(*storableInformation); ok {
-				return createInformationFromStorable(storable)
+			if normalized, ok := ins.(*normalizedInformation); ok {
+				return createInformationFromNormalized(normalized)
 			}
 
 			return nil, errors.New("the given storable instance cannot be converted to a Information instance")
 		},
-		EmptyNormalized: new(storableInformation),
+		EmptyNormalized: new(normalizedInformation),
 		EmptyStorable:   new(storableInformation),
 	})
 }

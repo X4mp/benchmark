@@ -1,6 +1,8 @@
 package information
 
 import (
+	"time"
+
 	uuid "github.com/satori/go.uuid"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity/entities/wallet"
@@ -10,6 +12,7 @@ import (
 type Information interface {
 	ID() *uuid.UUID
 	NetworkWallet() wallet.Wallet
+	MinimumRequestInterval() time.Duration
 	PricePerReportPurchase() int
 	RewardPerReport() int
 	MaxSpeedDifferentForNoise() int
@@ -30,6 +33,7 @@ type Repository interface {
 type CreateParams struct {
 	ID                         *uuid.UUID
 	NetworkWallet              wallet.Wallet
+	MinimumRequestInterval     time.Duration
 	PricePerReportPurchase     int
 	RewardPerReport            int
 	MaxSpeedDifferentForNoise  int
@@ -58,6 +62,7 @@ var SDKFunc = struct {
 		out, outErr := createInformation(
 			params.ID,
 			params.NetworkWallet,
+			params.MinimumRequestInterval,
 			params.PricePerReportPurchase,
 			params.RewardPerReport,
 			params.MaxSpeedDifferentForNoise,

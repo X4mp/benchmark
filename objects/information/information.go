@@ -3,6 +3,7 @@ package information
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
@@ -12,6 +13,7 @@ import (
 type information struct {
 	UUID                 *uuid.UUID    `json:"id"`
 	NetWallet            wallet.Wallet `json:"network_wallet"`
+	MinReqInt            time.Duration `json:"minimum_request_interval"`
 	Price                int           `json:"price_per_report_purchase"`
 	Reward               int           `json:"reward_per_report"`
 	MaxSpeedDiff         int           `json:"max_speed_difference_for_noise"`
@@ -19,10 +21,11 @@ type information struct {
 	MxStrikes            int           `json:"max_strikes"`
 }
 
-func createInformation(id *uuid.UUID, netWallet wallet.Wallet, price int, reward int, maxSpeedDiff int, diffPercentForStrike int, maxStrikes int) (Information, error) {
+func createInformation(id *uuid.UUID, netWallet wallet.Wallet, minReqInt time.Duration, price int, reward int, maxSpeedDiff int, diffPercentForStrike int, maxStrikes int) (Information, error) {
 	out := information{
 		UUID:                 id,
 		NetWallet:            netWallet,
+		MinReqInt:            minReqInt,
 		Price:                price,
 		Reward:               reward,
 		MaxSpeedDiff:         maxSpeedDiff,
@@ -48,6 +51,7 @@ func createInformationFromNormalized(normalized *normalizedInformation) (Informa
 		return createInformation(
 			&id,
 			wal,
+			normalized.MinimumRequestInterval,
 			normalized.PricePerReportPurchase,
 			normalized.RewardPerReport,
 			normalized.MaxSpeedDifferentForNoise,
@@ -81,6 +85,7 @@ func createInformationFromStorable(storable *storableInformation, rep entity.Rep
 		return createInformation(
 			&id,
 			wal,
+			storable.MinimumRequestInterval,
 			storable.PricePerReportPurchase,
 			storable.RewardPerReport,
 			storable.MaxSpeedDifferentForNoise,
@@ -101,6 +106,11 @@ func (obj *information) ID() *uuid.UUID {
 // NetworkWallet returns the network wallet
 func (obj *information) NetworkWallet() wallet.Wallet {
 	return obj.NetWallet
+}
+
+// MinimumRequestInterval returns the minimum request interval
+func (obj *information) MinimumRequestInterval() time.Duration {
+	return obj.MinReqInt
 }
 
 // PricePerReportPurchase returns the price per report purchase

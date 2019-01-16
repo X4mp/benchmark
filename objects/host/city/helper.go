@@ -26,17 +26,17 @@ func createMetaData() entity.MetaData {
 		Name: "City",
 		ToEntity: func(rep entity.Repository, data interface{}) (entity.Entity, error) {
 			if storable, ok := data.(*storableCity); ok {
-				return createCityFromStorable(storable)
+				return createCityFromStorable(storable, rep)
 			}
 
 			if dataAsBytes, ok := data.([]byte); ok {
-				ptr := new(storableCity)
+				ptr := new(normalizedCity)
 				jsErr := cdc.UnmarshalJSON(dataAsBytes, ptr)
 				if jsErr != nil {
 					return nil, jsErr
 				}
 
-				return createCityFromStorable(ptr)
+				return createCityFromNormalized(ptr)
 			}
 
 			str := fmt.Sprintf("the given data does not represent a City instance: %s", data)
@@ -45,21 +45,20 @@ func createMetaData() entity.MetaData {
 		},
 		Normalize: func(ins entity.Entity) (interface{}, error) {
 			if cit, ok := ins.(City); ok {
-				out := createStorableCity(cit)
-				return out, nil
+				return createNormalizedCity(cit)
 			}
 
 			str := fmt.Sprintf("the given entity (ID: %s) is not a valid City instance", ins.ID().String())
 			return nil, errors.New(str)
 		},
 		Denormalize: func(ins interface{}) (entity.Entity, error) {
-			if storable, ok := ins.(*storableCity); ok {
-				return createCityFromStorable(storable)
+			if normalized, ok := ins.(*normalizedCity); ok {
+				return createCityFromNormalized(normalized)
 			}
 
 			return nil, errors.New("the given storable instance cannot be converted to a City instance")
 		},
-		EmptyNormalized: new(storableCity),
+		EmptyNormalized: new(normalizedCity),
 		EmptyStorable:   new(storableCity),
 	})
 }

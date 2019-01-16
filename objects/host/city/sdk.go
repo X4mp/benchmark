@@ -2,6 +2,8 @@ package city
 
 import (
 	uuid "github.com/satori/go.uuid"
+	"github.com/xmnnetwork/benchmark/objects/host/country"
+	"github.com/xmnnetwork/benchmark/objects/host/region"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
 
@@ -9,6 +11,10 @@ import (
 type City interface {
 	ID() *uuid.UUID
 	Name() string
+	HasRegion() bool
+	Region() region.Region
+	HasCountry() bool
+	Country() country.Country
 }
 
 // Normalized represents a normalized city
@@ -24,8 +30,10 @@ type Repository interface {
 
 // CreateParams represents the Create params
 type CreateParams struct {
-	ID   *uuid.UUID
-	Name string
+	ID      *uuid.UUID
+	Name    string
+	Region  region.Region
+	Country country.Country
 }
 
 // CreateRepositoryParams represents the CreateRepository params
@@ -46,7 +54,16 @@ var SDKFunc = struct {
 			params.ID = &id
 		}
 
-		out, outErr := createCity(params.ID, params.Name)
+		if params.Region != nil {
+			out, outErr := createCityWithRegion(params.ID, params.Name, params.Region)
+			if outErr != nil {
+				panic(outErr)
+			}
+
+			return out
+		}
+
+		out, outErr := createCityWithCountry(params.ID, params.Name, params.Country)
 		if outErr != nil {
 			panic(outErr)
 		}

@@ -15,16 +15,21 @@ import (
 type customer struct {
 	UUID      *uuid.UUID        `json:"id"`
 	Trsf      transfer.Transfer `json:"transfer"`
-	Rep       report.Report     `json:"report"`
+	Reps      []report.Report   `json:"report"`
 	IPAddress net.IP            `json:"address"`
 	Prt       int               `json:"port"`
 }
 
-func createCustomer(id *uuid.UUID, trsf transfer.Transfer, rep report.Report) (Customer, error) {
+func createCustomer(id *uuid.UUID, trsf transfer.Transfer, reps []report.Report) (Customer, error) {
+	if len(reps) <= 0 {
+		str := fmt.Sprintf("the customer must order at least 1 report, %d given", len(reps))
+		return nil, errors.New(str)
+	}
+
 	out := customer{
 		UUID: id,
 		Trsf: trsf,
-		Rep:  rep,
+		Reps: reps,
 	}
 
 	return &out, nil
@@ -41,18 +46,23 @@ func createCustomerFromNormalized(normalized *normalizedCustomer) (Customer, err
 		return nil, trsfInsErr
 	}
 
-	repIns, repInsErr := report.SDKFunc.CreateMetaData().Denormalize()(normalized.Report)
-	if repInsErr != nil {
-		return nil, repInsErr
+	reps := []report.Report{}
+	for _, oneNormalizedReport := range normalized.Reports {
+		repIns, repInsErr := report.SDKFunc.CreateMetaData().Denormalize()(oneNormalizedReport)
+		if repInsErr != nil {
+			return nil, repInsErr
+		}
+
+		if rep, ok := repIns.(report.Report); ok {
+			reps = append(reps, rep)
+		}
+
+		str := fmt.Sprintf("there is at least 1 entity (ID: %s) in the report list that is not a report instance", repIns.ID().String())
+		return nil, errors.New(str)
 	}
 
 	if trsf, ok := trsfIns.(transfer.Transfer); ok {
-		if rep, ok := repIns.(report.Report); ok {
-			return createCustomer(&id, trsf, rep)
-		}
-
-		str := fmt.Sprintf("the entity (ID: %s) is not a valid server Report instance", repIns.ID().String())
-		return nil, errors.New(str)
+		return createCustomer(&id, trsf, reps)
 	}
 
 	str := fmt.Sprintf("the entity (ID: %s) is not a valid Transfer instance", trsfIns.ID().String())
@@ -70,9 +80,26 @@ func createCustomerFromStorable(storable *storableCustomer, rep entity.Repositor
 		return nil, trsfIDErr
 	}
 
-	repID, repIDErr := uuid.FromString(storable.ReportID)
-	if repIDErr != nil {
-		return nil, repIDErr
+	reps := []report.Report{}
+	repIDs := storable.ReportIDs
+	for _, oneRepIDAsString := range repIDs {
+		repID, repIDErr := uuid.FromString(oneRepIDAsString)
+		if repIDErr != nil {
+			return nil, repIDErr
+		}
+
+		repIns, repInsErr := rep.RetrieveByID(server.SDKFunc.CreateMetaData(), &repID)
+		if repInsErr != nil {
+			return nil, repInsErr
+		}
+
+		if rep, ok := repIns.(report.Report); ok {
+			reps = append(reps, rep)
+			continue
+		}
+
+		str := fmt.Sprintf("there is at least 1 entity (ID: %s) in the report list that is not a report instance", repIns.ID().String())
+		return nil, errors.New(str)
 	}
 
 	trsfIns, trsfInsErr := rep.RetrieveByID(transfer.SDKFunc.CreateMetaData(), &trsfID)
@@ -80,18 +107,8 @@ func createCustomerFromStorable(storable *storableCustomer, rep entity.Repositor
 		return nil, trsfInsErr
 	}
 
-	repIns, repInsErr := rep.RetrieveByID(server.SDKFunc.CreateMetaData(), &repID)
-	if repInsErr != nil {
-		return nil, repInsErr
-	}
-
 	if trsf, ok := trsfIns.(transfer.Transfer); ok {
-		if rep, ok := repIns.(report.Report); ok {
-			return createCustomer(&id, trsf, rep)
-		}
-
-		str := fmt.Sprintf("the entity (ID: %s) is not a valid server Report instance", repIns.ID().String())
-		return nil, errors.New(str)
+		return createCustomer(&id, trsf, reps)
 	}
 
 	str := fmt.Sprintf("the entity (ID: %s) is not a valid Transfer instance", trsfIns.ID().String())
@@ -109,8 +126,8 @@ func (obj *customer) Transfer() transfer.Transfer {
 }
 
 // Report returns the report
-func (obj *customer) Report() report.Report {
-	return obj.Rep
+func (obj *customer) Reports() []report.Report {
+	return obj.Reps
 }
 
 // IP returns the ip

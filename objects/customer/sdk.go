@@ -11,7 +11,7 @@ import (
 type Customer interface {
 	ID() *uuid.UUID
 	Transfer() transfer.Transfer
-	Report() report.Report
+	Reports() []report.Report
 }
 
 // Normalized represents a normalized customer
@@ -29,7 +29,7 @@ type Repository interface {
 type CreateParams struct {
 	ID       *uuid.UUID
 	Transfer transfer.Transfer
-	Report   report.Report
+	Reports  []report.Report
 }
 
 // CreateRepositoryParams represents the CreateRepository params
@@ -50,7 +50,7 @@ var SDKFunc = struct {
 			params.ID = &id
 		}
 
-		out, outErr := createCustomer(params.ID, params.Transfer, params.Report)
+		out, outErr := createCustomer(params.ID, params.Transfer, params.Reports)
 		if outErr != nil {
 			panic(outErr)
 		}

@@ -85,11 +85,17 @@ func representation() entity.Representation {
 		},
 		Keynames: func(ins entity.Entity) ([]string, error) {
 			if cus, ok := ins.(Customer); ok {
-				return []string{
+				keynames := []string{
 					retrieveAllCustomerKeyname(),
 					retrieveCustomerByTransferKeyname(cus.Transfer()),
-					retrieveCustomerByReportKeyname(cus.Report()),
-				}, nil
+				}
+
+				reps := cus.Reports()
+				for _, oneRep := range reps {
+					keynames = append(keynames, retrieveCustomerByReportKeyname(oneRep))
+				}
+
+				return keynames, nil
 			}
 
 			str := fmt.Sprintf("the entity (ID: %s) is not a valid Customer instance", ins.ID().String())
@@ -106,11 +112,14 @@ func representation() entity.Representation {
 				entityRepository := entity.SDKFunc.CreateRepository(ds)
 				entityService := entity.SDKFunc.CreateService(ds)
 
-				// make sure the report exists:
-				_, retRepErr := entityRepository.RetrieveByID(reportMetaData, cus.Report().ID())
-				if retRepErr != nil {
-					str := fmt.Sprintf("the Customer (ID: %s) contains a Report (ID: %s) that does not exists", cus.ID().String(), cus.Report().ID().String())
-					return errors.New(str)
+				// make sure the reports exists:
+				reps := cus.Reports()
+				for _, oneRep := range reps {
+					_, retRepErr := entityRepository.RetrieveByID(reportMetaData, oneRep.ID())
+					if retRepErr != nil {
+						str := fmt.Sprintf("the Customer (ID: %s) contains a Report (ID: %s) that does not exists", cus.ID().String(), oneRep.ID().String())
+						return errors.New(str)
+					}
 				}
 
 				// make sure the transfer does not exists:

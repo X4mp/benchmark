@@ -13,6 +13,7 @@ type Information interface {
 	ID() *uuid.UUID
 	NetworkWallet() wallet.Wallet
 	MinimumRequestInterval() time.Duration
+	MaximumRequestRadius() int
 	PricePerReportPurchase() int
 	RewardPerReport() int
 	MaxSpeedDifferentForNoise() int
@@ -33,6 +34,7 @@ type Repository interface {
 type CreateParams struct {
 	ID                         *uuid.UUID
 	NetworkWallet              wallet.Wallet
+	MaximumRequestRadius       int
 	MinimumRequestInterval     time.Duration
 	PricePerReportPurchase     int
 	RewardPerReport            int
@@ -62,6 +64,7 @@ var SDKFunc = struct {
 		out, outErr := createInformation(
 			params.ID,
 			params.NetworkWallet,
+			params.MaximumRequestRadius,
 			params.MinimumRequestInterval,
 			params.PricePerReportPurchase,
 			params.RewardPerReport,

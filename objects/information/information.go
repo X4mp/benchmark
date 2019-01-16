@@ -13,6 +13,7 @@ import (
 type information struct {
 	UUID                 *uuid.UUID    `json:"id"`
 	NetWallet            wallet.Wallet `json:"network_wallet"`
+	MxReqRadius          int           `json:"maximum_request_radius"`
 	MinReqInt            time.Duration `json:"minimum_request_interval"`
 	Price                int           `json:"price_per_report_purchase"`
 	Reward               int           `json:"reward_per_report"`
@@ -21,10 +22,11 @@ type information struct {
 	MxStrikes            int           `json:"max_strikes"`
 }
 
-func createInformation(id *uuid.UUID, netWallet wallet.Wallet, minReqInt time.Duration, price int, reward int, maxSpeedDiff int, diffPercentForStrike int, maxStrikes int) (Information, error) {
+func createInformation(id *uuid.UUID, netWallet wallet.Wallet, mxRequestRadius int, minReqInt time.Duration, price int, reward int, maxSpeedDiff int, diffPercentForStrike int, maxStrikes int) (Information, error) {
 	out := information{
 		UUID:                 id,
 		NetWallet:            netWallet,
+		MxReqRadius:          mxRequestRadius,
 		MinReqInt:            minReqInt,
 		Price:                price,
 		Reward:               reward,
@@ -51,6 +53,7 @@ func createInformationFromNormalized(normalized *normalizedInformation) (Informa
 		return createInformation(
 			&id,
 			wal,
+			normalized.MaximumRequestRadius,
 			normalized.MinimumRequestInterval,
 			normalized.PricePerReportPurchase,
 			normalized.RewardPerReport,
@@ -85,6 +88,7 @@ func createInformationFromStorable(storable *storableInformation, rep entity.Rep
 		return createInformation(
 			&id,
 			wal,
+			storable.MaximumRequestRadius,
 			storable.MinimumRequestInterval,
 			storable.PricePerReportPurchase,
 			storable.RewardPerReport,
@@ -111,6 +115,11 @@ func (obj *information) NetworkWallet() wallet.Wallet {
 // MinimumRequestInterval returns the minimum request interval
 func (obj *information) MinimumRequestInterval() time.Duration {
 	return obj.MinReqInt
+}
+
+// MaximumRequestRadius returns the maximum request radius
+func (obj *information) MaximumRequestRadius() int {
+	return obj.MxReqRadius
 }
 
 // PricePerReportPurchase returns the price per report purchase

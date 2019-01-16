@@ -10,6 +10,7 @@ type normalizedInformation struct {
 	ID                         string            `json:"id"`
 	NetworkWallet              wallet.Normalized `json:"network_wallet"`
 	MinimumRequestInterval     time.Duration     `json:"minimum_request_interval"`
+	MaximumRequestRadius       int               `json:"maximum_request_radius"`
 	PricePerReportPurchase     int               `json:"price_per_report_purchase"`
 	RewardPerReport            int               `json:"reward_per_report"`
 	MaxSpeedDifferentForNoise  int               `json:"max_speed_different_for_noise"`
@@ -27,6 +28,7 @@ func createNormalizedInformation(ins Information) (*normalizedInformation, error
 		ID:                         ins.ID().String(),
 		NetworkWallet:              wal,
 		MinimumRequestInterval:     ins.MinimumRequestInterval(),
+		MaximumRequestRadius:       ins.MaximumRequestRadius(),
 		PricePerReportPurchase:     ins.PricePerReportPurchase(),
 		RewardPerReport:            ins.RewardPerReport(),
 		MaxSpeedDifferentForNoise:  ins.MaxSpeedDifferentForNoise(),

@@ -1,7 +1,7 @@
 # Benchmark
-Benchmark is a blockchain application that enables servers and mobile users to test their connectivity with peers.  The reports are encrypted and stored on the blockchain database and customers can download the report listing they need and pay to decrypt them.
+Benchmark is a blockchain application that enables servers and network users to test their connectivity with peers.  The reports are encrypted and stored on the blockchain database and customers can download the report listing they need and pay to decrypt them.
 
-To make the wallpaper easier to read, we will call the entity that request reports "clients", the entity that verify the bandwidth of clients "servers" and the entity that buys reports "customers".
+To make the whitepaper easier to read, we will call the entity that request reports "clients", the entity that verify the bandwidth of clients "servers" and the entity that buys reports "customers".
 
 ## Business
 The business of the benchmark application is to sell benchmark reports based on the customer's specifications.  The target customers are companies and/or organizations that are affected by mobile activity and network usage.

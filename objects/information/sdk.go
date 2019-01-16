@@ -1,6 +1,7 @@
 package information
 
 import (
+	"github.com/NebulousLabs/Sia/modules/wallet"
 	uuid "github.com/satori/go.uuid"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
@@ -8,6 +9,7 @@ import (
 // Information represents the blockchain information
 type Information interface {
 	ID() *uuid.UUID
+	NetworkWallet() wallet.Wallet
 	PricePerReportPurchase() int
 	RewardPerReport() int
 	MaxSpeedDifferentForNoise() int

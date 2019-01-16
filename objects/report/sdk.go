@@ -1,15 +1,16 @@
 package report
 
 import (
+	"github.com/coreos/etcd/client"
 	uuid "github.com/satori/go.uuid"
-	"github.com/xmnnetwork/benchmark/objects/client"
+	"github.com/xmnnetwork/benchmark/objects/client/request"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
 
 // Report represents a report
 type Report interface {
 	ID() *uuid.UUID
-	Client() client.Client
+	Request() request.Request
 }
 
 // Normalized represents a normalized report

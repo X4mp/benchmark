@@ -7,7 +7,7 @@ To make the whitepaper easier to read, we will call the entity that request repo
 The business of the benchmark application is to sell benchmark reports based on the customer's specifications.  The target customers are companies and/or organizations that are affected by mobile activity and network usage.
 
 ### Network Providers
-Mobile and broadband networks can detect geographic locations where they have slow mobile connectivity and execute alerts to warn their customer support automatically or execute any other actions in their corporate infrastructure.
+Mobile and broadband network operators can detect geographical locations where they have slow connectivity and execute alerts to warn their customer support automatically or execute any other actions in their corporate infrastructure.
 
 They can also create reports to detect the connectivity speed of their competitors on a specific geolocation, detect their weak spots and target their user acquisition strategy to that specific geolocation, on customers of that competitor.
 

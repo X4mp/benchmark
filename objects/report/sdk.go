@@ -19,7 +19,7 @@ type Normalized interface {
 // Repository represents a report instance
 type Repository interface {
 	RetrieveByID(id *uuid.UUID) (Report, error)
-	RetrieveByRequest(req request.Request) (Report, error)
+	RetrieveSetByRequest(req request.Request, index int, amount int) (entity.PartialSet, error)
 }
 
 // CreateParams represents the Create params

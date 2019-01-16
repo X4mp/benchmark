@@ -38,22 +38,12 @@ func (app *repository) RetrieveByID(id *uuid.UUID) (Report, error) {
 	return nil, errors.New(str)
 }
 
-// RetrieveSetByRequest retrieves a report by request
-func (app *repository) RetrieveByRequest(req request.Request) (Report, error) {
+// RetrieveSetByRequest retrieves a report set by request
+func (app *repository) RetrieveSetByRequest(req request.Request, index int, amount int) (entity.PartialSet, error) {
 	keynames := []string{
 		retrieveAllReportKeyname(),
 		retrieveReportByRequestKeyname(req),
 	}
 
-	ins, insErr := app.entityRepository.RetrieveByIntersectKeynames(app.metaData, keynames)
-	if insErr != nil {
-		return nil, insErr
-	}
-
-	if rep, ok := ins.(Report); ok {
-		return rep, nil
-	}
-
-	str := fmt.Sprintf("the entity (ID: %s) is not a valid Information instance", ins.ID().String())
-	return nil, errors.New(str)
+	return app.entityRepository.RetrieveSetByIntersectKeynames(app.metaData, keynames, index, amount)
 }

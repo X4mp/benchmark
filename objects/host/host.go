@@ -25,81 +25,83 @@ type host struct {
 	Org       organization.Organization `json:"organization"`
 }
 
-func createHost(
+func createHostWithCity(
 	id *uuid.UUID,
 	ipAddress net.IP,
 	hostName string,
-	city city.City,
-	region region.Region,
-	country country.Country,
 	long int,
 	lat int,
 	org organization.Organization,
+	city city.City,
 ) (Host, error) {
 	out := host{
 		UUID:      id,
 		IPAddress: ipAddress,
 		HstName:   hostName,
-		Cit:       city,
-		Reg:       region,
-		Count:     country,
 		Long:      long,
 		Lat:       lat,
 		Org:       org,
+		Cit:       city,
+		Reg:       nil,
+		Count:     nil,
+	}
+
+	return &out, nil
+}
+
+func createHostWithRegion(
+	id *uuid.UUID,
+	ipAddress net.IP,
+	hostName string,
+	long int,
+	lat int,
+	org organization.Organization,
+	region region.Region,
+) (Host, error) {
+	out := host{
+		UUID:      id,
+		IPAddress: ipAddress,
+		HstName:   hostName,
+		Long:      long,
+		Lat:       lat,
+		Org:       org,
+		Cit:       nil,
+		Reg:       region,
+		Count:     nil,
+	}
+
+	return &out, nil
+}
+
+func createHostWithCountry(
+	id *uuid.UUID,
+	ipAddress net.IP,
+	hostName string,
+	long int,
+	lat int,
+	org organization.Organization,
+	country country.Country,
+) (Host, error) {
+	out := host{
+		UUID:      id,
+		IPAddress: ipAddress,
+		HstName:   hostName,
+		Long:      long,
+		Lat:       lat,
+		Org:       org,
+		Cit:       nil,
+		Reg:       nil,
+		Count:     country,
 	}
 
 	return &out, nil
 }
 
 func createHostFromNormalized(normalized *normalizedHost) (Host, error) {
+	ipAddress := net.ParseIP(normalized.IP)
 	id, idErr := uuid.FromString(normalized.ID)
 	if idErr != nil {
 		return nil, idErr
-	}
-
-	var cit city.City
-	if normalized.City != nil {
-		cityIns, cityInsErr := city.SDKFunc.CreateMetaData().Denormalize()(normalized.City)
-		if cityInsErr != nil {
-			return nil, cityInsErr
-		}
-
-		if casted, ok := cityIns.(city.City); ok {
-			cit = casted
-		}
-
-		str := fmt.Sprintf("the entity (ID: %s) is not a valid City instance", cityIns.ID().String())
-		return nil, errors.New(str)
-	}
-
-	var reg region.Region
-	if normalized.Region != nil {
-		regIns, regInsErr := region.SDKFunc.CreateMetaData().Denormalize()(normalized.Region)
-		if regInsErr != nil {
-			return nil, regInsErr
-		}
-
-		if casted, ok := regIns.(region.Region); ok {
-			reg = casted
-		}
-
-		str := fmt.Sprintf("the entity (ID: %s) is not a valid Region instance", regIns.ID().String())
-		return nil, errors.New(str)
-	}
-
-	var count country.Country
-	if normalized.Country != nil {
-		counIns, counInsErr := region.SDKFunc.CreateMetaData().Denormalize()(normalized.Region)
-		if counInsErr != nil {
-			return nil, counInsErr
-		}
-
-		if casted, ok := counIns.(country.Country); ok {
-			count = casted
-		}
-
-		str := fmt.Sprintf("the entity (ID: %s) is not a valid Country instance", counIns.ID().String())
-		return nil, errors.New(str)
 	}
 
 	var org organization.Organization
@@ -110,81 +112,59 @@ func createHostFromNormalized(normalized *normalizedHost) (Host, error) {
 		}
 
 		if casted, ok := orgIns.(organization.Organization); ok {
-			count = casted
+			org = casted
 		}
 
 		str := fmt.Sprintf("the entity (ID: %s) is not a valid Organization instance", orgIns.ID().String())
 		return nil, errors.New(str)
 	}
 
-	ipAddress := net.ParseIP(normalized.IP)
-	return createHost(&id, ipAddress, normalized.Hostname, cit, reg, count, normalized.Latitude, normalized.Longitude, org)
-}
-
-func createHostFromStorable(storable *storableHost, rep entity.Repository) (Host, error) {
-	id, idErr := uuid.FromString(storable.ID)
-	if idErr != nil {
-		return nil, idErr
-	}
-
-	var cit city.City
-	if storable.CityID != "" {
-		cityID, cityIDErr := uuid.FromString(storable.CityID)
-		if cityIDErr != nil {
-			return nil, cityIDErr
-		}
-
-		cityIns, cityInsErr := rep.RetrieveByID(city.SDKFunc.CreateMetaData(), &cityID)
+	if normalized.City != nil {
+		cityIns, cityInsErr := city.SDKFunc.CreateMetaData().Denormalize()(normalized.City)
 		if cityInsErr != nil {
 			return nil, cityInsErr
 		}
 
-		if casted, ok := cityIns.(city.City); ok {
-			cit = casted
+		if cit, ok := cityIns.(city.City); ok {
+			return createHostWithCity(&id, ipAddress, normalized.Hostname, normalized.Latitude, normalized.Longitude, org, cit)
 		}
 
 		str := fmt.Sprintf("the entity (ID: %s) is not a valid City instance", cityIns.ID().String())
 		return nil, errors.New(str)
 	}
 
-	var reg region.Region
-	if storable.RegionID != "" {
-		regionID, regionIDErr := uuid.FromString(storable.RegionID)
-		if regionIDErr != nil {
-			return nil, regionIDErr
-		}
-
-		regIns, regInsErr := rep.RetrieveByID(region.SDKFunc.CreateMetaData(), &regionID)
+	if normalized.Region != nil {
+		regIns, regInsErr := region.SDKFunc.CreateMetaData().Denormalize()(normalized.Region)
 		if regInsErr != nil {
 			return nil, regInsErr
 		}
 
-		if casted, ok := regIns.(region.Region); ok {
-			reg = casted
+		if reg, ok := regIns.(region.Region); ok {
+			return createHostWithRegion(&id, ipAddress, normalized.Hostname, normalized.Latitude, normalized.Longitude, org, reg)
 		}
 
 		str := fmt.Sprintf("the entity (ID: %s) is not a valid Region instance", regIns.ID().String())
 		return nil, errors.New(str)
 	}
 
-	var count country.Country
-	if storable.CountryID != "" {
-		countID, countIDErr := uuid.FromString(storable.CountryID)
-		if countIDErr != nil {
-			return nil, countIDErr
-		}
+	counIns, counInsErr := region.SDKFunc.CreateMetaData().Denormalize()(normalized.Region)
+	if counInsErr != nil {
+		return nil, counInsErr
+	}
 
-		counIns, counInsErr := rep.RetrieveByID(country.SDKFunc.CreateMetaData(), &countID)
-		if counInsErr != nil {
-			return nil, counInsErr
-		}
+	if count, ok := counIns.(country.Country); ok {
+		return createHostWithCountry(&id, ipAddress, normalized.Hostname, normalized.Latitude, normalized.Longitude, org, count)
+	}
 
-		if casted, ok := counIns.(country.Country); ok {
-			count = casted
-		}
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Country instance", counIns.ID().String())
+	return nil, errors.New(str)
+}
 
-		str := fmt.Sprintf("the entity (ID: %s) is not a valid Country instance", counIns.ID().String())
-		return nil, errors.New(str)
+func createHostFromStorable(storable *storableHost, rep entity.Repository) (Host, error) {
+	ipAddress := net.ParseIP(storable.IP)
+	id, idErr := uuid.FromString(storable.ID)
+	if idErr != nil {
+		return nil, idErr
 	}
 
 	var org organization.Organization
@@ -200,15 +180,67 @@ func createHostFromStorable(storable *storableHost, rep entity.Repository) (Host
 		}
 
 		if casted, ok := orgIns.(organization.Organization); ok {
-			count = casted
+			org = casted
 		}
 
 		str := fmt.Sprintf("the entity (ID: %s) is not a valid Organization instance", orgIns.ID().String())
 		return nil, errors.New(str)
 	}
 
-	ipAddress := net.ParseIP(storable.IP)
-	return createHost(&id, ipAddress, storable.Hostname, cit, reg, count, storable.Latitude, storable.Longitude, org)
+	if storable.CityID != "" {
+		cityID, cityIDErr := uuid.FromString(storable.CityID)
+		if cityIDErr != nil {
+			return nil, cityIDErr
+		}
+
+		cityIns, cityInsErr := rep.RetrieveByID(city.SDKFunc.CreateMetaData(), &cityID)
+		if cityInsErr != nil {
+			return nil, cityInsErr
+		}
+
+		if cit, ok := cityIns.(city.City); ok {
+			return createHostWithCity(&id, ipAddress, storable.Hostname, storable.Latitude, storable.Longitude, org, cit)
+		}
+
+		str := fmt.Sprintf("the entity (ID: %s) is not a valid City instance", cityIns.ID().String())
+		return nil, errors.New(str)
+	}
+
+	if storable.RegionID != "" {
+		regionID, regionIDErr := uuid.FromString(storable.RegionID)
+		if regionIDErr != nil {
+			return nil, regionIDErr
+		}
+
+		regIns, regInsErr := rep.RetrieveByID(region.SDKFunc.CreateMetaData(), &regionID)
+		if regInsErr != nil {
+			return nil, regInsErr
+		}
+
+		if reg, ok := regIns.(region.Region); ok {
+			return createHostWithRegion(&id, ipAddress, storable.Hostname, storable.Latitude, storable.Longitude, org, reg)
+		}
+
+		str := fmt.Sprintf("the entity (ID: %s) is not a valid Region instance", regIns.ID().String())
+		return nil, errors.New(str)
+	}
+
+	countID, countIDErr := uuid.FromString(storable.CountryID)
+	if countIDErr != nil {
+		return nil, countIDErr
+	}
+
+	counIns, counInsErr := rep.RetrieveByID(country.SDKFunc.CreateMetaData(), &countID)
+	if counInsErr != nil {
+		return nil, counInsErr
+	}
+
+	if count, ok := counIns.(country.Country); ok {
+		return createHostWithCountry(&id, ipAddress, storable.Hostname, storable.Latitude, storable.Longitude, org, count)
+	}
+
+	str := fmt.Sprintf("the entity (ID: %s) is not a valid Country instance", counIns.ID().String())
+	return nil, errors.New(str)
 }
 
 // ID returns the ID

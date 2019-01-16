@@ -73,16 +73,50 @@ var SDKFunc = struct {
 			params.ID = &id
 		}
 
-		out, outErr := createHost(
+		if params.City != nil {
+			out, outErr := createHostWithCity(
+				params.ID,
+				params.IP,
+				params.Hostname,
+				params.Longitude,
+				params.Latitude,
+				params.Organization,
+				params.City,
+			)
+
+			if outErr != nil {
+				panic(outErr)
+			}
+
+			return out
+		}
+
+		if params.Region != nil {
+			out, outErr := createHostWithRegion(
+				params.ID,
+				params.IP,
+				params.Hostname,
+				params.Longitude,
+				params.Latitude,
+				params.Organization,
+				params.Region,
+			)
+
+			if outErr != nil {
+				panic(outErr)
+			}
+
+			return out
+		}
+
+		out, outErr := createHostWithCountry(
 			params.ID,
 			params.IP,
 			params.Hostname,
-			params.City,
-			params.Region,
-			params.Country,
 			params.Longitude,
 			params.Latitude,
 			params.Organization,
+			params.Country,
 		)
 
 		if outErr != nil {

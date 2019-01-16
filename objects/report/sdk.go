@@ -3,7 +3,7 @@ package report
 import (
 	"github.com/coreos/etcd/client"
 	uuid "github.com/satori/go.uuid"
-	"github.com/xmnnetwork/benchmark/objects/client/request"
+	"github.com/xmnnetwork/benchmark/objects/request"
 	"github.com/xmnservices/xmnsuite/blockchains/core/objects/entity"
 )
 

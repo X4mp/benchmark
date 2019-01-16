@@ -34,7 +34,7 @@ The hardware manufacturers we want to target includes router, modem, cellphones,
 Here's a list of the hardware manufacturers companies we want to target:
 
 #### OpenWRT Integration
-We plan to create a custom [OpenWRT](https://openwrt.org) plugin using their [SDK](https://openwrt.org/docs/guide-developer/obtain.firmware.sdk).  This will enable hardware owners, with an [https://openwrt.org/supported_devices](OpenWRT supported device), to automatically request benchmark reports on the benchmark blockchain and be paid for it.  At the same time, the device owner will be able to receive automated alerts from his device when connectivity is slow and/or down.
+We plan to create a custom [OpenWRT](https://openwrt.org) plugin using their [SDK](https://openwrt.org/docs/guide-developer/obtain.firmware.sdk).  This will enable hardware owners, with an [OpenWRT supported device]([https://openwrt.org/supported_devices]), to automatically request benchmark reports on the benchmark blockchain and be paid for it.  At the same time, the device owner will be able to receive automated alerts from his device when connectivity is slow and/or down.
 
 ### Software and video game companies
 Software companies, including mobile software, video game software and PC software, sometimes heavily depend on internet connectivity.  We want to help software developers monetize their software by making benchmark reports on our blockchain.  The software would know if the user's internet connection is fast enough to work properly with the software, and the software company would earn benchmark tokens in order to create reports of their users on the benchmark blockchain.

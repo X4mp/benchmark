@@ -2,6 +2,8 @@ package city
 
 import (
 	amino "github.com/tendermint/go-amino"
+	"github.com/xmnnetwork/benchmark/objects/host/country"
+	"github.com/xmnnetwork/benchmark/objects/host/region"
 )
 
 const (
@@ -17,6 +19,10 @@ func init() {
 
 // Register registers all the interface -> struct to amino
 func Register(codec *amino.Codec) {
+	// dependencies:
+	country.Register(codec)
+	region.Register(codec)
+
 	// City
 	func() {
 		defer func() {

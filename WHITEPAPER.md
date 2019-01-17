@@ -1,5 +1,5 @@
 # Benchmark
-Benchmark is a blockchain application that enables servers and network users to test their connectivity with peers.  The reports are encrypted and stored on the blockchain database and customers can download the report listing they need and pay to decrypt them.
+Benchmark is a blockchain application that enables servers and network users to test their connectivity with peers and create benchmark reports.  These reports are encrypted and stored on the blockchain database. Customers can download the report listing they need and pay to decrypt each report.
 
 To make the whitepaper easier to read, we will call the entity that request reports "clients", the entity that verify the bandwidth of clients "servers" and the entity that buys reports "customers".
 
@@ -9,7 +9,7 @@ The business of the benchmark application is to sell benchmark reports based on 
 ### Network Providers
 Mobile and broadband network operators can detect geographical locations where they have slow connectivity and execute alerts to warn their customer support automatically or execute any other actions in their corporate infrastructure.
 
-They can also create reports to detect the connectivity speed of their competitors on a specific geolocation, detect their weak spots and target their user acquisition strategy to that specific geolocation, on customers of that competitor.
+They can also create reports to detect the connectivity speed of their competitors on a specific geolocation, detect their weak spots and adapt their user acquisition strategy to that specific geolocation, on customers of that competitor.
 
 ### Content delivery networks
 Content delivery networks (CDN's) have origin servers where they host the original files of their customers.  They then create copies of those files on servers that are physically located near the customers that want to download those files.
@@ -17,7 +17,7 @@ Content delivery networks (CDN's) have origin servers where they host the origin
 By using the benchmark blockchain reports, CDN's could detect the speed at which the file downloaders downloads from their server and automatically serve the files to the downloaders using the fastest route.
 
 ### Smart content delivery network
-We will create a smart CDN network where file hosts (servers) can be provided by anyone, anywhere.  The speed between decentralized servers and the downloaders will be provided by the benchmark blockchain reports, automatically.  That way, downloaders will always receive their files from the quickest servers possible.
+We will create a smart CDN network where file hosts (servers) can be provided by anyone, anywhere.  The speed between decentralized servers and the downloaders will be provided by the benchmark blockchain reports, automatically.  That way, downloaders will always receive their files from the fastest servers possible.
 
 ### Benchmark Partners
 We don't want to create our own client applications.  There is already enough benchmark client applications available.  Instead of competing with them, we want to partner with them, so they each use our blockchain.  Each partner will have tokens in the benchmark blockchain, making them part owners of the global benchmark blockchain.
@@ -70,7 +70,7 @@ Every time a customer orders a report, a percentage of the transaction goes to a
 
 Clients are paid every time a report is generated with them.  The amount they are paid per report and the frequency at which they can request reports are voted by all token holders.
 
-If the community wallet contains too much tokens, the token holders can vote to withdraw some tokens it holds to all token holders.  On the other hand, if it lack funds to pay clients, the token holders can vote to take tokens from everyone in the blockchain, pro-rata of the token each wallet owns.
+If the community wallet contains too much tokens, the token holders can vote to withdraw some tokens it holds to all token holders.  On the other hand, if it lacks funds to pay clients, the token holders can vote to take tokens from everyone in the blockchain, pro-rata of the token each wallet owns.
 
 ### Decentralization
 The benchmark blockchain tokens is a project created by the Artiqox team.  Therefore, the Artiqox coin (AIQ) holders will receive a good portion of the original benchmark tokens.
@@ -91,13 +91,13 @@ Every time someone executes a task and submit it as done, the project manager of
 The project manager receives a percentage of all the earnings made by the people that executed tasks on his project.  The percentage is voted by the token holders.A
 
 ### Guarantee
-Each person that wants to provide a service to the benchmark blockchain needs to be trusted by the token holders.  In order to be trusted, each person must make a pledge to the blockchain wallet.  The pledge amount varies depending of the service provided.  If a person act against the interest of the benchmark blockchain, the pledge is seized and deposited in the blockchain wallet.
+Each person that wants to provide a service to the benchmark blockchain needs to be trusted by the token holders.  In order to be trusted, each person must make a pledge to the blockchain wallet.  The pledge amount varies depending of the service provided.  If a person acts against the interest of the benchmark blockchain, the pledge is seized and deposited in the blockchain wallet.
 
 #### Validator nodes
 The benchmark blockchain is a proof-of-stake blockchain. The stake is a pledge that the node makes to the network's wallet.  If a node propagate false information regarding blocks and the network discovers the rogue activity, the pledge will be seized and given to the network's wallet.
 
 #### Servers
-People that wants to execute benchmark reports for clients on the benchmark blockchain will need to create a pledge to the network's wallet.  The amount of the pledge is being voted by the token holders.
+People that want to execute benchmark reports for clients on the benchmark blockchain will need to create a pledge to the network's wallet.  The amount of the pledge is being voted by the token holders.
 
 If a server gives information that is very different from the other server's information, the network will give strikes on the server for potentially acting maliciously.  After X amount of strikes, the network will seize the server's pledge.  The amount of strikes is being voted by the token holders.
 
@@ -164,7 +164,7 @@ That way, workers don't need to be pre-vetted using interviews.  Anyone can take
 * GET /hosts/organizations?index=0&amount=45
 * GET /hosts/organizations/id:{id}
 
-### Domain objects definition and relations
+### Domain object definition and relations
 This section will contain UML graphics that explains the relation between objects, which objects are generated by the blockchain itself and which objects are added by which entity (client, customer, server).
 
 ### Application GUI
